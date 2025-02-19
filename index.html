@@ -4,42 +4,36 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Personalized Learning Path</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 40px;
-            text-align: center;
-        }
-        input, button {
-            margin: 10px;
-            padding: 10px;
-            font-size: 16px;
-        }
-        #result {
-            margin-top: 20px;
-            font-weight: bold;
-        }
-    </style>
 </head>
 <body>
-    <h2>Enter Your Learning Preferences</h2>
-    <input type="text" id="userInput" placeholder="Type your learning preferences...">
-    <button onclick="getRecommendation()">Get Learning Path</button>
-    
-    <div id="result"></div>
+    <h1>Enter Your Learning Preferences</h1>
+    <input type="text" id="userInput" placeholder="Enter your preference">
+    <button onclick="getLearningPath()">Get Learning Path</button>
+    <p id="output"></p>
 
     <script>
-        async function getRecommendation() {
-            const input = document.getElementById("userInput").value;
-            
-            const response = await fetch("https://2428-34-68-116-234.ngrok-free.app/docs"/predict", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ "features": [input] })
-            });
+        function getLearningPath() {
+            let userInput = document.getElementById("userInput").value;
+            let outputDiv = document.getElementById("output");
 
-            const data = await response.json();
-            document.getElementById("result").innerText = "Recommended Path: " + JSON.stringify(data);
+            // Replace with your actual API URL from ngrok
+            let apiUrl = "https://2428-34-68-116-234.ngrok-free.app/predict";
+
+            fetch(apiUrl, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({"features": [userInput]})
+            })
+            .then(response => response.json())
+            .then(data => {
+                outputDiv.innerHTML = `<strong>Recommended Learning Path:</strong> ${JSON.stringify(data)}`;
+            })
+            .catch(error => {
+                outputDiv.innerHTML = "Error fetching data. Please try again.";
+                console.error("Error:", error);
+            });
         }
     </script>
 </body>
